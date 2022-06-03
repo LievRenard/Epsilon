@@ -21,6 +21,7 @@ defmodule Epsilon.Derivative do
     ret = ret ++ [(hd(tail) - head) / h]
     first_derivative(tail, h, ret)
   end
+
   @spec first_derivative(list, list) :: list
   def first_derivative(_f = [head | tail], _h =[h_head | h_tail]) when tail != [] do
     ret = [(hd(tail) - head) / (hd(h_tail) - h_head)]
