@@ -6,13 +6,13 @@ defmodule Epsilon.Derivative do
   @doc """
   First order derivative of given list.
 
-  ## Parameters
+  ### Parameters
 
   - f: A list for derivation. There must be at least 2 elements in the list.
 
   - h*(optional)*: Interval of domain of f.
   """
-  @spec first_derivative(list, number) :: list
+  @spec first_derivative(list, number | list) :: list
   def first_derivative(_f = [head | tail], h \\ 1) when is_number(h) and tail != [] do
     ret = [(hd(tail) - head) / h]
     first_derivative(tail, h, ret)
@@ -21,8 +21,6 @@ defmodule Epsilon.Derivative do
     ret = ret ++ [(hd(tail) - head) / h]
     first_derivative(tail, h, ret)
   end
-
-  @spec first_derivative(list, list) :: list
   def first_derivative(_f = [head | tail], _h =[h_head | h_tail]) when tail != [] do
     ret = [(hd(tail) - head) / (hd(h_tail) - h_head)]
     first_derivative(tail, h_tail, ret)
