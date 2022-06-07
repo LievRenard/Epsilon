@@ -6,5 +6,8 @@ defmodule Epsilon do
   import Epsilon.Complex
   import Epsilon.Polynomial
 
+  @typedoc """
+  The extended number type including integer, float and complex.
+  """
   @type extended_number :: number | Epsilon.Complex.complex | Epsilon.Complex.polarcomplex
 end
