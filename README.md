@@ -33,3 +33,9 @@ The numerical calculation module for elixir.
 
 - Complex number type in cartesian & polar coordinate
 - Elemetary arithmetics & functions for complex number
+
+**Polynomial**
+
+- Polynomials expressed with coefficients list
+- Polynomial addition, subtraction and multiplication
+- Can act like function with substitution(~>/2) operator
