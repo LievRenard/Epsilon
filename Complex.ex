@@ -1,8 +1,7 @@
 defmodule Epsilon.Complex do
   @moduledoc """
-  Module "Complex" provides complex type and elementary arithmetic and functions of complex numbers.
+  Module "Complex" provides complex type and elementary arithmetic and functions of complex numbers. It has Vector_Behaviour.
   """
-  import Epsilon.Behaviour.Vector_Behaviour
   @behaviour Epsilon.Behaviour.Vector_Behaviour
 
   @typedoc """
@@ -79,7 +78,7 @@ defmodule Epsilon.Complex do
 
   - :other : Means z is not a number.
   """
-  @spec form_of(number | complex | polarcomplex) :: atom
+  @spec form_of(Epsilon.extended_number) :: atom
   def form_of(z) do
     case z do
       [real: _, imag: _] -> :carte
@@ -106,7 +105,7 @@ defmodule Epsilon.Complex do
 
   - z2: Another complex number
   """
-  @spec add(number | complex | polarcomplex, number | complex | polarcomplex) :: complex
+  @spec add(Epsilon.extended_number, Epsilon.extended_number) :: complex
   def add(z1, z2) do
     unify(z1,z2) |> then(fn ([[real: re1, imag: im1],[real: re2, imag: im2]]) -> new(re1+re2,im1+im2) end)
   end
@@ -120,7 +119,7 @@ defmodule Epsilon.Complex do
 
   - z2: Another complex number
   """
-  @spec sub(number | complex | polarcomplex, number | complex | polarcomplex) :: complex
+  @spec sub(Epsilon.extended_number, Epsilon.extended_number) :: complex
   def sub(z1, z2) do
     unify(z1,z2) |> then(fn ([[real: re1, imag: im1],[real: re2, imag: im2]]) -> new(re1-re2,im1-im2) end)
   end
@@ -134,7 +133,7 @@ defmodule Epsilon.Complex do
 
   - z2: Another complex number
   """
-  @spec mul(number | complex | polarcomplex, number | complex | polarcomplex) :: complex
+  @spec mul(Epsilon.extended_number, Epsilon.extended_number) :: complex
   def mul(z1, z2) do
     unify(z1,z2) |> then(fn ([[real: re1, imag: im1],[real: re2, imag: im2]]) -> new(re1*re2-im1*im2,re1*im2+re2*im1) end)
   end
@@ -148,7 +147,7 @@ defmodule Epsilon.Complex do
 
   - z2: Another complex number
   """
-  @spec div(number | complex | polarcomplex, number | complex | polarcomplex) :: complex
+  @spec div(Epsilon.extended_number, Epsilon.extended_number) :: complex
   def div(z1, z2) do
     unify(z1,z2) |> then(fn ([[real: re1, imag: im1],[real: re2, imag: im2]]) -> (new(re1*re2+im1*im2,-re1*im2+re2*im1) |> mul(1/(re2**2+im2**2))) end)
   end
@@ -171,10 +170,10 @@ defmodule Epsilon.Complex do
 
   - z: A complex number
   """
-  @spec abs(number | complex | polarcomplex) :: number
-  @spec norm(number | complex | polarcomplex) :: number
-  @spec abs(number | complex | polarcomplex, :square) :: number
-  @spec norm(number | complex | polarcomplex, :square) :: number
+  @spec abs(Epsilon.extended_number) :: number
+  @spec norm(Epsilon.extended_number) :: number
+  @spec abs(Epsilon.extended_number, :square) :: number
+  @spec norm(Epsilon.extended_number, :square) :: number
   def abs(z), do: :math.sqrt(Epsilon.Complex.abs(z, :square))
   def abs(z,:square), do: unify(z) |> then(fn ([real: re, imag: im]) -> re**2+im**2 end)
   def norm(z), do: Epsilon.Complex.abs(z)
@@ -200,7 +199,7 @@ defmodule Epsilon.Complex do
   @doc """
   Complex exponential function. Return cartesian form.
   """
-  @spec exp(number | complex | polarcomplex) :: complex
+  @spec exp(Epsilon.extended_number) :: complex
   def exp(z), do: unify(z) |> then(fn ([real: re, imag: im]) -> new(:math.exp(re),im,:polar) end) |> to_carte
 
   @doc """
@@ -212,86 +211,86 @@ defmodule Epsilon.Complex do
 
   - x: Exponent. A real number of float or integer type.
   """
-  @spec pow(number | complex | polarcomplex, number) :: complex
+  @spec pow(Epsilon.extended_number, number) :: complex
   def pow(z,x) when is_number(x), do: [unify(z) |> to_polar,x]
   |> then(fn ([[abs: r, arg: theta],x]) -> new(:math.pow(r,x),theta*x,:polar) end) |> to_carte
 
   @doc """
   Square root of given complex number. Return cartesian form.
   """
-  @spec sqrt(number | complex | polarcomplex) :: complex
+  @spec sqrt(Epsilon.extended_number) :: complex
   def sqrt(z), do: pow(z,0.5)
 
   @doc """
   Complex cosine function. Return cartesian form.
   """
-  @spec cos(number | complex | polarcomplex) :: complex
+  @spec cos(Epsilon.extended_number) :: complex
   def cos(z), do: exp(mul(i(),z)) |> add(exp(mul(new(0,-1),z))) |> Epsilon.Complex.div(2)
 
   @doc """
   Complex sine function. Return cartesian form.
   """
-  @spec sin(number | complex | polarcomplex) :: complex
+  @spec sin(Epsilon.extended_number) :: complex
   def sin(z), do: exp(mul(i(),z)) |> sub(exp(mul(new(0,-1),z))) |> Epsilon.Complex.div(new(0,2))
 
   @doc """
   Complex tangent function. Return cartesian form.
   """
-  @spec tan(number | complex | polarcomplex) :: complex
+  @spec tan(Epsilon.extended_number) :: complex
   def tan(z), do: sin(z) |> Epsilon.Complex.div(cos(z))
 
   @doc """
   Complex cotangent function. Return cartesian form.
   """
-  @spec cot(number | complex | polarcomplex) :: complex
+  @spec cot(Epsilon.extended_number) :: complex
   def cot(z), do: cos(z) |> Epsilon.Complex.div(sin(z))
 
   @doc """
   Complex secant function. Return cartesian form.
   """
-  @spec sec(number | complex | polarcomplex) :: complex
+  @spec sec(Epsilon.extended_number) :: complex
   def sec(z), do: 1 |> Epsilon.Complex.div(cos(z))
 
   @doc """
   Complex cosecant function. Return cartesian form.
   """
-  @spec csc(number | complex | polarcomplex) :: complex
+  @spec csc(Epsilon.extended_number) :: complex
   def csc(z), do: 1 |> Epsilon.Complex.div(sin(z))
 
   @doc """
   Complex hyperbolic cosine function. Return cartesian form.
   """
-  @spec cosh(number | complex | polarcomplex) :: complex
+  @spec cosh(Epsilon.extended_number) :: complex
   def cosh(z), do: mul(i(),z) |> cos
 
   @doc """
   Complex hyperbolic sine function. Return cartesian form.
   """
-  @spec sinh(number | complex | polarcomplex) :: complex
+  @spec sinh(Epsilon.extended_number) :: complex
   def sinh(z), do: mul(i(),z) |> sin |> mul(new(0,-1))
 
   @doc """
   Complex hyperbolic tangent function. Return cartesian form.
   """
-  @spec tanh(number | complex | polarcomplex) :: complex
+  @spec tanh(Epsilon.extended_number) :: complex
   def tanh(z), do: sinh(z) |> Epsilon.Complex.div(cosh(z))
 
   @doc """
   Complex hyperbolic cotangent function. Return cartesian form.
   """
-  @spec coth(number | complex | polarcomplex) :: complex
+  @spec coth(Epsilon.extended_number) :: complex
   def coth(z), do: cosh(z) |> Epsilon.Complex.div(sinh(z))
 
   @doc """
   Complex hyperbolic secant function. Return cartesian form.
   """
-  @spec sech(number | complex | polarcomplex) :: complex
+  @spec sech(Epsilon.extended_number) :: complex
   def sech(z), do: 1 |> Epsilon.Complex.div(cosh(z))
 
   @doc """
   Complex hyperbolic cosecant function. Return cartesian form.
   """
-  @spec csch(number | complex | polarcomplex) :: complex
+  @spec csch(Epsilon.extended_number) :: complex
   def csch(z), do: 1 |> Epsilon.Complex.div(sinh(z))
 
 end
