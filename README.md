@@ -37,5 +37,5 @@ The numerical calculation module for elixir.
 **Polynomial**
 
 - Polynomials expressed with coefficients list
-- Polynomial addition, subtraction and multiplication
+- Polynomial arithmetics, derivative and integration
 - Can act like function with substitution(~>/2) operator
