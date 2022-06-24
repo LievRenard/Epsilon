@@ -162,4 +162,10 @@ defmodule Epsilon.Polynomial do
     |> Enum.map(fn {a, i} -> a/(i+1) end)
     [c | new_p] |> new
   end
+  def integrate(f = [:polynomial | _p], a, b) do
+    integral_p = integrate(f)
+    integral_p_a = a ~> integral_p
+    integral_p_b = b ~> integral_p
+    integral_p_b - integral_p_a
+  end
 end
