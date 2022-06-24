@@ -117,7 +117,7 @@ defmodule Epsilon.Polynomial do
   - n: An exponent
   """
   @spec pow(polynomial, integer) :: polynomial
-  def pow(f = [:polynomial | _p], 0), do: new([1])
+  def pow(_f = [:polynomial | _p], 0), do: new([1])
   def pow(f = [:polynomial | _p], 1), do: f
   def pow(f = [:polynomial | _p], n) when is_integer(n), do: mul(f, f) |> pow(f, n-1)
   defp pow(pf = [:polynomial | _pp], _f = [:polynomial | _p], 1), do: pf
@@ -140,4 +140,26 @@ defmodule Epsilon.Polynomial do
   """
   @spec substitute(Epsilon.extended_number, polynomial) :: Epsilon.extended_number
   def substitute(x,f = [:polynomial | _p]), do: x ~> f
+
+  @spec derivative(polynomial) :: polynomial
+  @spec derivative(polynomial, integer) :: polynomial
+  def derivative(_f = [:polynomial | p]) do
+    [_head | new_p] = p
+    |> Enum.with_index()
+    |> Enum.map(fn
+      {_a, 0} -> nil
+      {a, i} -> a*i
+      end)
+    new_p |> new
+  end
+  def derivative(f = [:polynomial | _p], 1), do: derivative(f)
+  def derivative(f = [:polynomial | _p], order), do: derivative(f, order-1)
+
+  @spec integrate(polynomial, Epsilon.extended_number) :: polynomial
+  def integrate(_f = [:polynomial | p], c \\ 0) do
+    new_p = p
+    |> Enum.with_index()
+    |> Enum.map(fn {a, i} -> a/(i+1) end)
+    [c | new_p] |> new
+  end
 end
