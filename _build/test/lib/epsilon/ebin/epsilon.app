@@ -1,0 +1,12 @@
+{application,epsilon,
+             [{applications,[kernel,stdlib,elixir,logger]},
+              {description,"epsilon"},
+              {modules,['Elixir.Epsilon',
+                        'Elixir.Epsilon.Behaviour.Vector_Behaviour',
+                        'Elixir.Epsilon.Complex','Elixir.Epsilon.Const',
+                        'Elixir.Epsilon.Derivative',
+                        'Elixir.Epsilon.Integrate','Elixir.Epsilon.Matrix',
+                        'Elixir.Epsilon.Polynomial','Elixir.Epsilon.Vector',
+                        'Elixir.Testbed']},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.
